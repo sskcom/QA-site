@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 // Route::resource('tasks', TaskController::class)->only(['index']);
 
-Route::get('/hello',  'App\Http\Controllers\TaskController@show');
+// Route::get('/pagination',  'App\Http\Controllers\TaskController@show');
+Route::post('/pagination','App\Http\Controllers\QuestionsController@show');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

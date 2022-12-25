@@ -1,36 +1,78 @@
 
 <template>
- 
-  <div>
-    <v-pagination v-model="page" :length=10></v-pagination>
+  <div class="vl-parent">
+    <loading v-model:active="isLoading" :can-cancel="true" :on-cancel="onCancel" :is-full-page="true">
+    
+      
+          <video src="http://localhost:8081/video/Now-Loading.mp4"></video>
+  
+    </loading>
+
   </div>
+
+  <v-card elevation="2">
+
+<v-col cols="12" class="d-flex align-center " v-for="(item, index) in list.data.data.slice(0, 19)">
+
+  <div
+    class="flex flex-col items-center w-full md:w-1/2 lg:w-1/3 px-4 py-6 bg-gray-100 rounded-lg shadow-lg border-blue-500">
+    <h2 class="text-2xl font-bold text-gray-800">{{ item.title }}</h2>
+    <p class="text-gray-600">{{ item.tag }}</p>
+    <p class="text-gray-600">回答数: {{ item.answer_count }}</p>
+    <p class="text-gray-600">解決済み: {{ item.is_soved }}</p>
+    <p class="text-gray-600">投稿者: {{ item.user_name }}</p>
+    <p class="text-gray-600">閲覧数: {{ item.view_counst }}</p>
+  </div>
+
+</v-col>
+
+</v-card>
+
+<div>
+<v-pagination v-model="page" :length=list.data.last_page></v-pagination>
+</div>
+
 </template>
 
-
-
-
 <script>
-
 
 import { ref } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import axios from 'axios'
-
-
-
-
-async function getAPI (offset, perpage) {
-  const res = await axios.get("/api/hello", {
-    params: {
-      offset: offset,
-      perpage: perpage
-    }
-  })
-  return res.data
-}
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
 
 export default {
   name: 'Articles',
+
+
+  data() {
+    return {
+      isLoading: true,
+    }
+  },
+  components: {
+    Loading
+  },
+
+  created() {
+
+    axios.post('/api/pagination', {
+      newValue: 1
+    })
+      .then(res => {
+
+        console.log(res);
+        this.list = res;
+
+
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+    
+  },
   setup() {
     const route = useRoute();
     const perpage = 10;
@@ -39,9 +81,7 @@ export default {
     let list = ref([]);
 
 
-    console.log(route);
-
-    if (null!=route && route.query) {
+    if (null != route && route.query) {
       page.value = (route.query.page) ? parseInt(route.query.page) : 1;
     } else {
       page.value = 1;
@@ -49,42 +89,62 @@ export default {
 
     const setOffset = () => {
 
-      console.log("page.value:"+page.value);
-      console.log("perpage:"+perpage);
+
       offset = (page.value > 0) ? (page.value - 1) * perpage : 0;
 
     }
 
-    const load = async () => {
-      try {
-        console.log(offset);
-        list.value = await getAPI(offset, perpage);
-        console.log(list.value);
-      } catch (error) {
-        console.error(error) // catch any errors that may occur in getAPI
-      }
-    }
-    
     setOffset()
-    load()
 
     onBeforeRouteUpdate(async (to, from) => {
       if (to.query.page !== from.query.page) {
         page.value = to.query.page;
         setOffset()
-        load()
       }
     })
 
+   console.log(list.value.Is);  
+    
     return {
       perpage,
       page,
-      list
+      list,
+      
+      
     }
-  },
-  
-}
 
+  },
+
+  watch: {
+
+    list: function(newValue, oldValue){
+        this.isLoading=false;
+    },
+    
+    
+    page: function (newValue, oldValue) {
+      // 現在のページ番号が変化した時に実行される処理
+
+      axios.post('/api/pagination', {
+        newValue: newValue
+      })
+        .then(res => {
+
+         
+          this.list = res;
+
+
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+    }
+
+    
+  }
+
+}
 
 
 </script>

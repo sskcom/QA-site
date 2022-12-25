@@ -16,45 +16,22 @@
         
        
     </head>
-    <body Fclass="antialiased">
+    <body>
     
 
+
+       
    
     @vite('resources/js/app.js')
     
-    <hello-component></hello-component>
+    
 
     
-    <div id="app"></div>
-
-    {{-- <ul>
-        @foreach($inquiries as $inquiry)
-
-
-        <div class="article-info">
-            <h1>
-                {{$inquiry->name}}
-            </h1>
-
-            <p>
-
-                {{$inquiry->description}}
-            </p>
-        
-            <span class="article-category">
-                {{$inquiry->status_id}}
-            </span>
-        
-            <time class="article-date">
-                {{$inquiry->created_at}}
-            </time>
-        </div>
-        @endforeach
-    </ul>
-
     
-        {{$inquiries->links()}} --}}
-    
+
+    <div id="app" ></div>
+
+
        
     </body>
 </html>

@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@keyframes loading-animation {
+    0% {
+      /* アニメーションの開始時のスタイル */
+      background-image: url('http://localhost:8081/image/loading.png');
+    }
+    100% {
+      /* アニメーションの終了時のスタイル */
+      background-image: url('http://localhost:8081/image/loading2.png');
+    }
+  }
+  
+  .loading-animation {
+    animation: loading-animation 1s linear infinite;
+  }
