@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/pagination',  'App\Http\Controllers\TaskController@show');
 Route::post('/pagination','App\Http\Controllers\QuestionsController@show');
 
+Route::post('/register','App\Http\Controllers\RegisterController@register');
+Route::post('/login','App\Http\Controllers\RegisterController@login');
+Route::post('/logout','App\Http\Controllers\RegisterController@logout');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
