@@ -5,15 +5,28 @@
         {{ test }}
     </div> -->
 
-    <v-toolbar title="サービス名"
-        v-bind:style="{ position: 'relative', background: '#FFF6E5', border: '3px solid #e0d6c3', borderRadius: '20px' }">
+    <v-toolbar v-bind:style="{ position: 'relative' }">
+
+        <template v-slot:title>
+            <div @click="home" v-bind:style="{
+                position: 'fixed',
+                left: '3%',
+                top: '2%',
+                fontweight: '700',
+            
+            }" class=" px-4 py-2    focus:outline-none focus:shadow-outline">
+                駆け出し部屋
+            </div>
+        </template>
 
 
-
-
-        <v-btn @click="login" v-bind:style="{ background: '#FFFBE5' }"
+        <v-btn @click="login" v-bind:style="{
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+            fontweight: '700',
+        
+        }"
             class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outline-none focus:shadow-outline">
-            <!-- {{ store.username }} -->
+
             ログイン
         </v-btn>
 
@@ -29,8 +42,10 @@
             <v-text-field v-model="password" :rules="passwordRules" label="パスワード" required></v-text-field>
 
 
-            <v-btn v-bind:style="{ left: '85%', background: '#FFFBE5' }"
-                class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outline-none focus:shadow-outline"
+            <v-btn v-bind:style="{
+                left: '85%',
+                background: '#F9FBFE'
+            }" class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outline-none focus:shadow-outline"
                 @click="validate"> 登録
 
             </v-btn>
@@ -40,9 +55,6 @@
 
         </v-form>
 
-        <!-- <v-btn @click="cookie">
-            クッキーテスト
-        </v-btn> -->
 
     </div>
 </template>
@@ -82,6 +94,7 @@ export default {
 
     created() {
         const state = store();
+        state.screen_transition();
         // console.log(store);
     },
 
@@ -90,6 +103,11 @@ export default {
     },
 
     methods: {
+
+        home() {
+            this.state.screenState = 1;
+            this.state.screen_transition();
+        },
         async validate() {
             const { valid } = await this.$refs.form.validate()
 

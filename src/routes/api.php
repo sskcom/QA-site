@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/pagination',  'App\Http\Controllers\TaskController@show');
 Route::post('/pagination','App\Http\Controllers\QuestionsController@show');
+Route::post('/save_question','App\Http\Controllers\QuestionsController@save_question');
+Route::post('/send_question','App\Http\Controllers\QuestionsController@send_question');
+Route::post('/send_answer','App\Http\Controllers\AnswersController@send_answer');
+
 
 Route::post('/register','App\Http\Controllers\RegisterController@register');
 Route::post('/login','App\Http\Controllers\RegisterController@login');

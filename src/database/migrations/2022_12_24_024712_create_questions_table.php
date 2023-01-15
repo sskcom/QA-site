@@ -14,14 +14,19 @@ return new class extends Migration
     public function up()
     {
         Schema::create('questions', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('tag');
-            $table->integer('answer_count');
-            $table->boolean('is_solved')->default(false);
-            $table->string('user_name');
-            $table->integer('view_count');
+            $table->id()->unique();
+            $table->string('title'); 
+            $table->string('category'); //カテゴリ
+            $table->integer('answer_count');//回答数
+            $table->boolean('is_solved')->default(false);//回答済み判定
+            $table->json('content');//質問内容
+            $table->string('user_name'); //ユーザネーム
+            $table->integer('view_count');//閲覧数
             $table->timestamps();
+
+
+
+          
         });
     }
 

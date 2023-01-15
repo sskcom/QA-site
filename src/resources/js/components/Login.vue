@@ -1,15 +1,30 @@
 <template>
 
-<v-toolbar title="サービス名" v-bind:style="{ position: 'relative',background: '#FFF6E5', border: '3px solid #e0d6c3', borderRadius: '20px' }"
->
+    <v-toolbar v-bind:style="{ position: 'relative' }">
 
-<v-btn v-on:click="register" v-bind:style="{ background: '#FFFBE5' }"
-class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outline-none focus:shadow-outline">
-    新規登録
-</v-btn>
+        <template v-slot:title>
+            <div @click="home" v-bind:style="{
+                position: 'fixed',
+                left: '3%',
+                top: '2%',
+                fontweight: '700',
+            
+            }" class=" px-4 py-2    focus:outline-none focus:shadow-outline">
+                駆け出し部屋
+            </div>
+        </template>
+
+        <v-btn v-on:click="register" v-bind:style="{
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+            fontweight: '700',
+        
+        }"
+            class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outline-none focus:shadow-outline">
+            新規登録
+        </v-btn>
 
 
-</v-toolbar>
+    </v-toolbar>
 
 
     <!-- <h1>
@@ -31,9 +46,10 @@ class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outlin
             <v-text-field v-model="password" :rules="passwordRules" label="パスワード" required></v-text-field>
 
 
-            <v-btn v-bind:style="{ left: '85%',background: '#FFFBE5' }"
-                class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outline-none focus:shadow-outline"
-               
+            <v-btn v-bind:style="{
+                left: '85%',
+                background: '#F9FBFE'
+            }" class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outline-none focus:shadow-outline"
                 @click="validate"> ログイン
 
             </v-btn>
@@ -43,22 +59,6 @@ class="mr-4 rounded-full px-4 py-2 text-gray-500  hover:bg-gray-300 focus:outlin
 
         </v-form>
 
-        <!-- <v-btn @click="logout">Logout</v-btn>
-
-        <v-btn @click="cookie">
-            クッキーテスト
-        </v-btn> -->
-
-       
-
-        <!-- <div>
-            <v-btn @click="showList = !showList">Toggle List</v-btn>
-            <v-list v-if="showList">
-                <v-list-item v-for="item in items" :key="item.title" @click="menu = false">
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </div> -->
 
     </div>
 </template>
@@ -108,6 +108,7 @@ export default {
     }),
     created() {
         const state = store();
+        state.screen_transition();
         // console.log(store);
     },
 
@@ -116,6 +117,11 @@ export default {
     },
 
     methods: {
+        home() {
+            this.state.screenState = 1;
+            this.state.screen_transition();
+        },
+
         async validate() {
             const { valid } = await this.$refs.form.validate()
 
@@ -141,7 +147,7 @@ export default {
 
                     //ログイン成功時、ユーザ情報を書き換え
                     this.state.login(res.data.username, email, res.data.hash);
-                    this.state.screenState=4;
+                    this.state.screenState = 4;
 
                     this.state.screen_transition();
 
@@ -189,7 +195,7 @@ export default {
             this.test = useCookies.get("hash");
         },
 
-        register(){
+        register() {
             this.state.screenState = 2;
 
             this.state.screen_transition();
