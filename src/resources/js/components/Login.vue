@@ -37,6 +37,22 @@
         {{ store.hash }}
     </h1> -->
 
+
+    <v-dialog v-model="popupVisible">
+        <v-card v-bind:style="{ position: ' relative' }">
+            <!-- <v-card-title v-bind:style="{position:'absolute',top:'50%',left:'50%' }"> -->
+            <v-card-title class="text-center">
+                メールアドレスかパスワードが間違っています
+            </v-card-title>
+            <!-- <v-card-actions class="text-center">
+                <v-btn @click="showDialog = false">Close</v-btn>
+            </v-card-actions> -->
+        </v-card>
+    </v-dialog>
+
+
+
+
     <div
         v-bind:style="{ position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: '500px', height: '400px' }">
         <v-form ref="form" v-model="valid" lazy-validation>
@@ -62,6 +78,12 @@
 
     </div>
 </template>
+
+<style>
+v-card-title {
+    font-size: 1.2rem;
+}
+</style>
 
 <script>
 import axios from 'axios';
@@ -105,6 +127,8 @@ export default {
             v => (v && /[A-Z]/.test(v) && /[a-z]/.test(v) && /\d/.test(v)) || 'パスワードは少なくとも1つの大文字、1つの小文字、1つの数字を含む必要があります'
         ],
 
+        popupVisible: false
+
     }),
     created() {
         const state = store();
@@ -119,6 +143,10 @@ export default {
     methods: {
         home() {
             this.state.screenState = 1;
+            this.email = '';
+            this.password = '';
+            this.$refs.form.reset()
+
             this.state.screen_transition();
         },
 
@@ -143,13 +171,25 @@ export default {
                         password: password
                     });
 
+                    console.log("サーバからの応答");
                     console.log(res);
 
-                    //ログイン成功時、ユーザ情報を書き換え
-                    this.state.login(res.data.username, email, res.data.hash);
-                    this.state.screenState = 4;
 
-                    this.state.screen_transition();
+                    if (res.data.error) {
+                        console.log("エラーのデータ");
+                        console.log(res.data.error);
+                        this.popupVisible = true;
+                        this.email = '';
+                        this.password = '';
+                    } else {
+                        //ログイン成功時、ユーザ情報を書き換え
+                        this.state.login(res.data.username, email, res.data.hash);
+                        this.state.screenState = 4;
+
+                        this.state.screen_transition();
+                    }
+
+                  
 
 
 
@@ -158,15 +198,7 @@ export default {
                     // console.log(hash, email, username)
 
 
-                    useCookies.set('hash', hash, {
-                        expires: new Date().setDate(new Date().getDate() + 7) // 保存期間を 7 日に設定
-                    })
-                    useCookies.set('email', email, {
-                        expires: new Date().setDate(new Date().getDate() + 7) // 保存期間を 7 日に設定
-                    })
-                    useCookies.set('username', username, {
-                        expires: new Date().setDate(new Date().getDate() + 7) // 保存期間を 7 日に設定
-                    })
+
 
 
                 } catch (error) {

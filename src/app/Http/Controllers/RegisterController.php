@@ -22,13 +22,13 @@ class RegisterController extends Controller
     $property2 = $request->input('email');
     $property3 = $request->input('password');
 
-    $data = $property1 . $property2 . $property3;
+    // $data = $property1 . $property2 . $property3;
 
     // file_put_contents('test.log',$data);
 
     $hashedPassword = Hash::make($request->password);
 
-    file_put_contents('test.log', $hashedPassword);
+    // file_put_contents('test.log', $hashedPassword);
 
 
     // qasite_users::create([

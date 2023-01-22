@@ -104,8 +104,21 @@ export default {
 
     methods: {
 
+       
+
         home() {
+
+
+
+            this.username = '';
+            this.email = '';
+            this.password = '';
+            this.$refs.form.reset()
+
             this.state.screenState = 1;
+
+            
+            
             this.state.screen_transition();
         },
         async validate() {
